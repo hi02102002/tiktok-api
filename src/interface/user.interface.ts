@@ -1,18 +1,20 @@
-import { Role } from '@/types';
 import { Document } from 'mongoose';
 
 export interface IUser extends Document {
    firstName: string;
    lastName: string;
+   username: string;
+   avatar: string;
+   bio: string;
    email: string;
    password: string;
-   createdAt: string;
-   updatedAt: string;
    confirmPassword?: string;
-   role: Role;
+   refreshToken: string | undefined;
+   tokenResetPassword: string | undefined;
+   following: Array<string>;
+   followers: Array<string>;
    comparePassword(
       candidatePassword: string,
       passwordHashed: string
    ): Promise<boolean>;
-   refreshToken: string | null;
 }

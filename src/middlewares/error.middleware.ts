@@ -1,16 +1,32 @@
 import { AppError } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 
+type Error = AppError & {
+   code: number;
+};
+
+const handleDuplicateError = (err: Error) => {
+   return {
+      message: 'This already have existed.',
+      status: 409,
+   };
+};
+
 const errorMiddleware = (
-   err: AppError & {
-      code: number;
-   },
+   err: Error,
    req: Request,
    res: Response,
    next: NextFunction
 ) => {
-   const status = err.statusCode || 500;
-   const message = err.message || 'Something went wrong';
+   let status = err.statusCode || 500;
+   let message = err.message || 'Something went wrong';
+   console.log( err);
+
+   if (err?.code === 11000) {
+      const res = handleDuplicateError(err);
+      status = res.status;
+      message = res.message;
+   }
 
    res.status(status).send({
       status,

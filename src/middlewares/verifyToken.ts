@@ -1,5 +1,6 @@
+import { IUser } from '@/interface';
 import { User } from '@/models';
-import { AppError, catchAsync } from '@/utils';
+import { AppError, catchAsync, getTokenAuthorization } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
@@ -9,18 +10,12 @@ const verifyToken = catchAsync(
          headers: {
             authorization: string;
          };
+         user: IUser;
       },
       res: Response,
       next: NextFunction
    ) => {
-      let token: string | undefined = undefined;
-
-      if (
-         req.headers.authorization &&
-         req.headers.authorization.startsWith('Bearer')
-      ) {
-         token = req.headers.authorization.split(' ')[1];
-      }
+      const token = getTokenAuthorization(req.headers.authorization);
 
       if (!token) {
          return next(
@@ -47,7 +42,6 @@ const verifyToken = catchAsync(
          );
       }
 
-      //@ts-ignore
       req.user = user;
       next();
    }

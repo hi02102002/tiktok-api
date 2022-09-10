@@ -1,2 +1,4 @@
 export { default as AuthController } from './auth.controller';
-export { default as CarController } from './car.controller';
+export { default as PostController } from './post.controller';
+export { default as UploadController } from './upload.controller';
+export { default as UserController } from './user.controller';

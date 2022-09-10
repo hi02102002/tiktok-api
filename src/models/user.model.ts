@@ -1,11 +1,14 @@
 import { IUser } from '@/interface';
-import { Role } from '@/types';
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import validator from 'validator';
 
 const userSchema = new mongoose.Schema<IUser>(
    {
+      avatar: {
+         type: String,
+         default: '/noavatar.png',
+      },
       firstName: {
          type: String,
          required: true,
@@ -15,6 +18,12 @@ const userSchema = new mongoose.Schema<IUser>(
          type: String,
          required: [true, 'Last name is required'],
          trim: true,
+      },
+      username: {
+         type: String,
+         required: [true, 'Username is required'],
+         trim: true,
+         unique: true,
       },
       email: {
          type: String,
@@ -40,15 +49,28 @@ const userSchema = new mongoose.Schema<IUser>(
             message: "Password don't match",
          },
       },
-      role: {
-         type: String,
-         default: Role.USER,
-         enum: Object.values(Role),
-      },
       refreshToken: {
          type: String,
-         default: null,
+         default: undefined,
+         select: false,
       },
+      tokenResetPassword: {
+         type: String,
+         default: undefined,
+         select: false,
+      },
+      followers: [
+         {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+         },
+      ],
+      following: [
+         {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+         },
+      ],
    },
    {
       timestamps: true,
@@ -68,6 +90,10 @@ userSchema.methods.comparePassword = async function (
 ): Promise<boolean> {
    return await bcrypt.compare(candidatePassword, passwordHashed);
 };
+
+// userSchema.pre(/^find/, function (next) {
+//    this.find();
+// });
 
 const User = mongoose.model<IUser>('User', userSchema);
 
