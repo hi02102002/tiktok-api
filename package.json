@@ -5,7 +5,7 @@
    "main": "index.js",
    "scripts": {
       "build": "npx tsc && tsc-alias",
-      "start": "node dist/index.js",
+      "start": "node ./dist/index.js",
       "dev": "concurrently \"npx tsc --watch\" \"tsc-alias -w\" \"nodemon -q dist/index.js\""
    },
    "keywords": [],
