@@ -3,9 +3,9 @@ import { model, Schema } from 'mongoose';
 
 const postSchema = new Schema<IPost>(
    {
-      content: {
+      caption: {
          type: String,
-         required: [true, 'Content is required'],
+         required: [true, 'Caption is required'],
          trim: true,
       },
       userId: {
@@ -13,10 +13,9 @@ const postSchema = new Schema<IPost>(
          ref: 'User',
          required: [true, 'User is required'],
       },
-      videoUrl: {
-         type: String,
-         required: [true, 'Video url is required'],
-         trim: true,
+      video: {
+         id: String,
+         url: String,
       },
       usersLiked: [
          {
@@ -32,6 +31,14 @@ const postSchema = new Schema<IPost>(
       allowComment: {
          type: Boolean,
          default: true,
+      },
+      width: {
+         type: Number,
+         required: true,
+      },
+      height: {
+         type: Number,
+         required: true,
       },
    },
    {

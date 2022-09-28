@@ -7,7 +7,7 @@ class UploadController {
    public upload = catchAsync(
       async (req: Request, res: Response, next: NextFunction) => {
          const uploader = async (path: string) =>
-            await cloudinaryUploads(path, 'Images');
+            await cloudinaryUploads(path, 'files');
          const urls: Array<{ url: string; id: string }> = [];
          const files = req.files;
          if (files) {

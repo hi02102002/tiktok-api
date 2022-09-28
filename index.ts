@@ -19,7 +19,7 @@ dotenv.config({
 const app: Express = express();
 const apiLimiter = rateLimit({
    windowMs: 60 * 60 * 1000, // 15 minutes
-   max: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+   max: 1000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
    message: 'Too many accounts from this IP, please try again after an hour',
 });
 app.use(morgan('dev'));

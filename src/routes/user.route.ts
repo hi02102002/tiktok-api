@@ -16,4 +16,7 @@ router
    .get(UserController.getUser)
    .patch(verifyToken, UserController.updateUser);
 
+router.patch('/follow/:userId', verifyToken, UserController.followingUser);
+router.patch('/unfollow/:userId', verifyToken, UserController.unfollowingUser);
+
 export default router;

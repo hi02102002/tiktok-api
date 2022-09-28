@@ -1,13 +1,16 @@
 import { IUser } from '@/interface';
 import { User } from '@/models';
+import { UserService } from '@/services';
 import { IRequest, TypedRequestBody } from '@/types';
 import { AppError, catchAsync } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
+
 class UserController {
    public getUser = catchAsync(
       async (req: IRequest, res: Response, next: NextFunction) => {
          const { id } = req.params;
-         const user = await User.findById(id);
+         const user = await UserService.getUser(id);
+
          if (!user) {
             return next(new AppError('No user found with this ID', 404));
          }
@@ -81,20 +84,8 @@ class UserController {
       async (req: Request, res: Response, next: NextFunction) => {
          const userId = req.query.userId as string;
 
-         let suggestAccounts: Array<IUser> = [];
-         if (userId) {
-            const user = await User.findById(userId); // lay ra user hien tai
-            user?.following.push(userId); // exclude
-            suggestAccounts = await User.find({
-               _id: {
-                  $nin: user?.following,
-               },
-            })
-               .limit(20)
-               .skip(0);
-         } else {
-            suggestAccounts = await User.find().limit(20).skip(0);
-         }
+         const suggestAccounts: Array<IUser> =
+            await UserService.getSuggestAccounts(userId);
 
          res.status(200).json({
             message: 'success',
@@ -109,17 +100,84 @@ class UserController {
       async (req: IRequest, res: Response, next: NextFunction) => {
          const limit = Number(req.query.limit) || 10;
          const page = Number(req.query.page) || 1;
-         const followingAccounts = await User.find({
-            _id: {
-               $in: req.user.following,
-            },
-         })
-            .limit(limit)
-            .skip((page - 1) * limit);
+         const followingAccounts = await UserService.getFollowingAccounts(
+            req.user,
+            page,
+            limit
+         );
          res.status(200).json({
             message: 'success',
             data: {
                followingAccounts,
+            },
+         });
+      }
+   );
+
+   public followingUser = catchAsync(
+      async (req: IRequest, res: Response, next: NextFunction) => {
+         const { userId } = req.params;
+
+         const receiver = await User.findByIdAndUpdate(userId, {
+            $push: {
+               followers: req.user._id,
+            },
+         });
+
+         if (!receiver) {
+            return next(new AppError('No receiver with this ID', 404));
+         }
+
+         const user = await User.findByIdAndUpdate(
+            req.user._id,
+            {
+               $push: {
+                  following: userId,
+               },
+            },
+            {
+               new: true,
+            }
+         );
+
+         res.status(200).json({
+            message: 'success',
+            data: {
+               user,
+            },
+         });
+      }
+   );
+   public unfollowingUser = catchAsync(
+      async (req: IRequest, res: Response, next: NextFunction) => {
+         const { userId } = req.params;
+
+         const receiver = await User.findByIdAndUpdate(userId, {
+            $pull: {
+               followers: req.user._id,
+            },
+         });
+
+         if (!receiver) {
+            return next(new AppError('No receiver with this ID', 404));
+         }
+
+         const user = await User.findByIdAndUpdate(
+            req.user._id,
+            {
+               $pull: {
+                  following: userId,
+               },
+            },
+            {
+               new: true,
+            }
+         );
+
+         res.status(200).json({
+            message: 'success',
+            data: {
+               user,
             },
          });
       }

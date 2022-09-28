@@ -18,3 +18,7 @@ export interface IRequest extends Request {
 export interface TypedRequestBody<T> extends Request {
    body: T;
 }
+
+export type TypedRequestBodyUser<T> = TypedRequestBody<T> & {
+   user: IUser;
+};

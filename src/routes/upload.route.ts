@@ -7,6 +7,6 @@ const router = Router();
 
 router
    .route('/upload')
-   .post(verifyToken, upload.array('video'), UploadController.upload);
+   .post(verifyToken, upload.array('file'), UploadController.upload);
 
 export default router;
