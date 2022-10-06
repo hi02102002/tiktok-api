@@ -5,7 +5,7 @@
    "main": "index.js",
    "scripts": {
       "build": "npx tsc && tsc-alias ",
-      "start": " SET NODE_ENV=product & node ./dist/index.js",
+      "start": " SET NODE_ENV=product & node dist/index.js",
       "dev": "concurrently \"npx tsc --watch\" \"tsc-alias -w\" \"nodemon -q dist/index.js\""
    },
    "keywords": [],
