@@ -22,7 +22,10 @@ const apiLimiter = rateLimit({
    max: 1000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
    message: 'Too many accounts from this IP, please try again after an hour',
 });
-app.use(morgan('dev'));
+
+if (process.env.NODE_ENV === 'development') {
+   app.use(morgan('dev'));
+}
 
 app.use('/api', apiLimiter);
 app.use(mongoSanitize());
