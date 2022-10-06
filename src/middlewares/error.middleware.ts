@@ -1,4 +1,4 @@
-import { AppError } from '@/utils';
+import { AppError, logger } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 
 type Error = AppError & {
@@ -20,7 +20,7 @@ const errorMiddleware = (
 ) => {
    let status = err.statusCode || 500;
    let message = err.message || 'Something went wrong';
-   console.log( err);
+   logger.error(err);
 
    if (err?.code === 11000) {
       const res = handleDuplicateError(err);

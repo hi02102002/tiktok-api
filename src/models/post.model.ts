@@ -40,6 +40,10 @@ const postSchema = new Schema<IPost>(
          type: Number,
          required: true,
       },
+      cover: {
+         id: String,
+         url: String,
+      },
    },
    {
       timestamps: true,

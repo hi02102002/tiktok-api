@@ -9,6 +9,8 @@ class CommentController {
    public getAllComments = catchAsync(
       async (req: IRequest, res: Response, next: NextFunction) => {
          const { postId } = req.params;
+         const limit = Number(req.query.limit) || 10;
+         const page = Number(req.query.page) || 1;
 
          const comments = await Comment.aggregate([
             {
@@ -55,7 +57,13 @@ class CommentController {
                   'children',
                ],
             },
-         ]);
+         ])
+            .sort({
+               createdAt: -1,
+               _id: -1,
+            })
+            .skip((page - 1) * limit)
+            .limit(limit);
 
          res.status(200).json({
             message: 'success',
@@ -159,9 +167,12 @@ class CommentController {
                ],
             },
          ])
+            .sort({
+               createdAt: -1,
+               _id: -1,
+            })
             .skip((page - 1) * limit)
-            .limit(limit)
-            .sort('-createdAt');
+            .limit(limit);
 
          res.status(200).json({
             message: 'Success',

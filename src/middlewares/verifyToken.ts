@@ -3,6 +3,7 @@ import { User } from '@/models';
 import { AppError, catchAsync, getTokenAuthorization } from '@/utils';
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const verifyToken = catchAsync(
    async (
@@ -31,7 +32,7 @@ const verifyToken = catchAsync(
          process.env.JWT_SECRET_ACCESS_TOKEN as string
       ) as JwtPayload;
 
-      const user = await User.findById(id);
+      const user = await User.findById(new mongoose.Types.ObjectId(id));
 
       if (!user) {
          return next(

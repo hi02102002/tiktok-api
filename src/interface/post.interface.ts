@@ -10,4 +10,5 @@ export interface IPost extends Document {
    allowComment: boolean;
    width: number;
    height: number;
+   cover: IVideoUrl;
 }

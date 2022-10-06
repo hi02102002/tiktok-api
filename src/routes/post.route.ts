@@ -8,15 +8,16 @@ router
    .route('/')
    .post(verifyToken, PostController.createPost)
    .get(PostController.getAllPost);
+
+router.get('/following', verifyToken, PostController.getAllFollowingPost);
+router.get('/user/:userId', PostController.getAllPostByUserId);
+router.get('/me', verifyToken, PostController.getAllOwnPost);
+
 router
    .route('/:id')
    .post(verifyToken, PostController.editPost)
    .get(PostController.getOnePost)
    .delete(verifyToken, PostController.deletePost);
-
-router.get('/following', verifyToken, PostController.getAllFollowingPost);
-router.get('/user/:userId', PostController.getAllPostByUserId);
-router.get('/me', verifyToken, PostController.getAllOwnPost);
 
 router.patch('/:postId/like', verifyToken, PostController.like);
 router.patch('/:postId/unlike', verifyToken, PostController.unlike);

@@ -19,15 +19,13 @@ const cloudinaryUploads = async (
    return await cloudinary.uploader
       .upload(file, {
          folder,
-         resource_type: 'raw',
+         resource_type: 'auto',
       })
       .then((result) => {
          console.log(result);
          return {
             url: result.url,
             id: result.public_id,
-            height: result.height,
-            width: result.width,
          };
       });
 };

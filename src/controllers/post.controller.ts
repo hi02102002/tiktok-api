@@ -87,6 +87,13 @@ const unsetFields = {
    ],
 };
 
+const sort = {
+   $sort: {
+      createdAt: -1,
+      _id: -1,
+   },
+};
+
 class PostController {
    public createPost = catchAsync(
       async (
@@ -261,10 +268,20 @@ class PostController {
             replaceRoot,
             addFields,
             unsetFields,
-         ])
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort('-createdAt');
+            {
+               $sort: {
+                  createdAt: -1,
+                  _id: -1,
+               },
+            },
+            {
+               $skip: (page - 1) * limit,
+            },
+            {
+               $limit: limit,
+            },
+         ]);
+
          res.status(200).json({
             message: 'success',
             data: {
@@ -292,15 +309,25 @@ class PostController {
             unwindUser,
             lookupPost,
             unwindPost,
-
+            lookupComment,
             groupSumLike,
             replaceRoot,
             addFields,
             unsetFields,
-         ])
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort('-createdAt');
+            {
+               $sort: {
+                  createdAt: -1,
+                  _id: -1,
+               },
+            },
+            {
+               $skip: (page - 1) * limit,
+            },
+            {
+               $limit: limit,
+            },
+         ]);
+
          res.status(200).json({
             message: 'success',
             data: {
@@ -327,14 +354,25 @@ class PostController {
             unwindUser,
             lookupPost,
             unwindPost,
+            lookupComment,
             groupSumLike,
             replaceRoot,
             addFields,
             unsetFields,
-         ])
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort('-createdAt');
+            {
+               $sort: {
+                  createdAt: -1,
+                  _id: -1,
+               },
+            },
+            {
+               $skip: (page - 1) * limit,
+            },
+            {
+               $limit: limit,
+            },
+         ]);
+
          res.status(200).json({
             message: 'success',
             data: {
@@ -359,14 +397,25 @@ class PostController {
             unwindUser,
             lookupPost,
             unwindPost,
+            lookupComment,
             groupSumLike,
             replaceRoot,
             addFields,
             unsetFields,
-         ])
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .sort('-createdAt');
+            {
+               $sort: {
+                  createdAt: -1,
+                  _id: -1,
+               },
+            },
+            {
+               $skip: (page - 1) * limit,
+            },
+            {
+               $limit: limit,
+            },
+         ]);
+
          res.status(200).json({
             message: 'success',
             data: {

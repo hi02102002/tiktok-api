@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema<IUser>(
          type: String,
          default: '/noavatar.png',
       },
+      bio: {
+         type: String,
+         default: '',
+      },
       firstName: {
          type: String,
          required: true,

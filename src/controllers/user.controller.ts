@@ -30,6 +30,9 @@ class UserController {
          next: NextFunction
       ) => {
          const { id } = req.params;
+
+         console.log(req.body);
+
          const user = await User.findByIdAndUpdate(
             id,
             { ...req.body },
